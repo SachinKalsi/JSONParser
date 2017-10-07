@@ -1,17 +1,11 @@
 package main.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by kalsi on 07/10/17.
  */
 public class Parser {
-    /**
-     * {"color":"red","size":10,"cost":100.0,"big":true}
-     * {"sample":{"ok":"rascal"},"color":"red","size":10,"cost":100.0,"big":true}
-     */
     public static Map parse(String jsonString) {
         Map<String, Object> json = new HashMap<String, Object>();
         int i = 1;
@@ -38,7 +32,11 @@ public class Parser {
                     json.put(key, Boolean.parseBoolean(value));
                     break;
                 default:
-                    json.put(key, value.indexOf('.') >= 0 ? Double.parseDouble(value) : Integer.parseInt(value));
+                    if (value.indexOf('.') >= 0) {
+                        json.put(key, Double.parseDouble(value));
+                    } else {
+                        json.put(key, Integer.parseInt(value));
+                    }
                     break;
             }
         }
@@ -65,7 +63,7 @@ public class Parser {
                 }
                 j++;
             }
-            arrayList.add(parse(value.substring(i,j+1)));
+            arrayList.add(parse(value.substring(i, j + 1)));
             i = j + 1;
         }
         return arrayList;
