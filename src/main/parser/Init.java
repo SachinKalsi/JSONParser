@@ -15,20 +15,23 @@ public class Init {
 //            System.out.print(entry.getKey() + " : ");
 //            System.out.println(entry.getValue());
 //        }
-        findKey("size", "10");
+        System.out.println(findValueFromKey("cost") instanceof Double);
     }
 
-    public static void findKey(String key, String value) {
-        Object map = json;
+    public static Object findValueFromKey(String key) {
+        Object value = json;
         String[] array = key.split("\\.");
         for (String keyString : array) {
-            map = getValue(keyString, map);
+            value = getValue(keyString, value);
+            if (value == null) {
+                break;
+            }
         }
-        System.out.println(map == value);
+        return value;
     }
 
     public static Object getValue(String key, Object map) {
         map = (Map<String, Object>) map;
-        return  ((Map<String, Object>) map).get(key);
+        return ((Map<String, Object>) map).get(key);
     }
 }

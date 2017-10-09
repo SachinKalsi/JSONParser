@@ -47,7 +47,7 @@ public class Parser {
         ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
         int i = 1;
         int j;
-        int flowerCount = 0;
+        int flowerCount;
         while (i < value.length() - 1) {
             flowerCount = 0;
             j = i;
