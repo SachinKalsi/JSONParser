@@ -6,13 +6,22 @@ import java.util.*;
  * Created by kalsi on 09/10/17.
  */
 public class JSONObject {
-    Object jsonObject = null;
+    private Object jsonObject = null;
 
     public JSONObject(Map<String, Object> jsonObject) {
         this.jsonObject = jsonObject;
     }
 
-    public Object getValueFromKey(String key) {
+    public Boolean evaluateCondition(Condition condition) {
+        Boolean isExistsCondition = condition.getCondition();
+        if (isExistsCondition == null) {
+            Object value = getValueFromKey(condition.getKey());
+            return (value != null && (value.toString().equals(condition.getValue().toString())));
+        }
+        return isKeyExists(condition.getKey()) == isExistsCondition;
+    }
+
+    private Object getValueFromKey(String key) {
         Object value = jsonObject;
         String[] array = key.split("\\.");
         for (String keyString : array) {
@@ -29,7 +38,7 @@ public class JSONObject {
         return value;
     }
 
-    public Boolean isKeyExists(String key) {
+    private Boolean isKeyExists(String key) {
         Object map = jsonObject;
         String[] array = key.split("\\.");
         for (String keyString : array) {

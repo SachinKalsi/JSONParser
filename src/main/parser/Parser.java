@@ -9,10 +9,12 @@ public class Parser {
     public void process(List<String> input) {
         String expression = input.get(0);
         String jsonString = input.get(1);
+
         JSONParser jsonParser = new JSONParser(jsonString);
         ExpressionParser expressionParser = new ExpressionParser(expression);
         JSONObject jsonObject = new JSONObject(jsonParser.getJsonObject());
-        ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator(jsonObject,expressionParser);
+
+        ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator(jsonObject, expressionParser);
         expressionEvaluator.evaluate();
 
     }

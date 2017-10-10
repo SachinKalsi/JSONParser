@@ -4,14 +4,18 @@ package main.parser;
  * Created by kalsi on 09/10/17.
  */
 public class Condition {
-    private String type = null; // isExists Condition
+    private Boolean isExistsCondition = null; // isExists Condition
     private String key;
     private String value = null;
     private String inputString;
 
-    public Condition(String inputCondition) {
+    public Condition(String inputString) {
         this.inputString = inputString;
         parse();
+    }
+
+    public Boolean getCondition() {
+        return isExistsCondition;
     }
 
     private void parse() {
@@ -26,7 +30,7 @@ public class Condition {
     }
 
     private void parseInputString() {
-        String[] array = inputString.split(" == ");
+        String[] array = inputString.split("==");
         this.key = array[0];
         this.value = removeSingleQuotes(array[1]);
     }
@@ -39,23 +43,14 @@ public class Condition {
     }
 
     private void parseInputStringWithExistCondition() {
-        String[] array = inputString.split(" ");
-        if (array[0].equals("NOT")) {
-            type = "NOT EXISTS";
-            setKey(array[2]);
-        } else {
-            type = "EXISTS";
-            setKey(array[1]);
+        String[] array = inputString.split("EXISTS");
+        isExistsCondition = true; // exists
+        if (array[0].equals("NOT")) { // not exists
+            isExistsCondition = false;
         }
+        setKey(array[1].substring(1));
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getKey() {
         return key;
