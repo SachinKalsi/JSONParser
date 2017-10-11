@@ -24,7 +24,7 @@ It reads the input data and give it to Parser to process
 Sub-modules
 -------------------------------------------------------------------
 1) Stack.java: This sub-module will help in evaluation of expression condition.
-    Example: to get the topmost token etc
+Example: to get the topmost token etc
 2) JSONParserHelper.java: This sub-module contains helper functions
 -------------------------------------------------------------------
 Assumptions
