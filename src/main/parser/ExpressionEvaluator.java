@@ -78,18 +78,25 @@ public class ExpressionEvaluator {
             top--;
             Boolean second = tempStack[top].equals("true") ? true : false;
             if (operation.equals("AND")) {
-                tempStack[top] = (second && first) ? "true" : "false";
+                tempStack[top] = getStringValue((second && first));
             } else if (operation.equals("OR")) {
-                tempStack[top] = (second || first) ? "true" : "false";
+                tempStack[top] = getStringValue((second || first));
             } else {
                 System.out.println("Somthing went wrong!");
             }
         }
         System.out.println("final answer");
-        System.out.println(tempStack[top]);
+        System.out.println();
 
+        return getBooleanValue(tempStack[top]);
+    }
 
-        return true;
+    private Boolean getBooleanValue(String booleanString) {
+        return booleanString.equals("true") ? true : false;
+    }
+
+    private String getStringValue(Boolean b) {
+        return b ? "true" : "false";
     }
 
     private int skipNextCondition(ArrayList<Object> parsedExpression, int index, int brackets) {
