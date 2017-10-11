@@ -31,6 +31,7 @@ public class ExpressionEvaluator {
 
     /**
      * parse tokens array to find the final result with the help of Stack
+     *
      * @return
      */
     private Boolean computeResult() {
@@ -43,6 +44,11 @@ public class ExpressionEvaluator {
         return JSONParseHelper.getBooleanValue(stack.getTop());
     }
 
+    /**
+     * @param token
+     * @param stack if the token is ')' , then pop & compute the tokens from stack, until we get '('
+     *              pushed the computed result back into the stack
+     */
     private void parseToken(String token, Stack stack) {
         if (token.equals(")")) {
             Boolean result = null;
