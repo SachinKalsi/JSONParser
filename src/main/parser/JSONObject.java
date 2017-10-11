@@ -14,10 +14,11 @@ public class JSONObject {
 
     public Boolean evaluateCondition(Condition condition) {
         Boolean isExistsCondition = condition.getCondition();
-        if (isExistsCondition == null) {
+        if (isExistsCondition == null) { // check whether key == value
             Object value = getValueFromKey(condition.getKey());
             return (value != null && (value.toString().equals(condition.getValue().toString())));
         }
+        //check whether key exits in json or not
         return isKeyExists(condition.getKey()) == isExistsCondition;
     }
 

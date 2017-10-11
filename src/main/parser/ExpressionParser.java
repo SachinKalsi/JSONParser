@@ -8,10 +8,10 @@ import java.util.*;
 public class ExpressionParser {
     String inputExpression = null;
 
-    ArrayList<Object> arrayList = new ArrayList<Object>();
+    ArrayList<Object> tokens = new ArrayList<Object>();
 
-    public ArrayList<Object> getParsedExpression() {
-        return arrayList;
+    public ArrayList<Object> getTokens() {
+        return tokens;
     }
 
     public ExpressionParser(String inputExpression) {
@@ -19,6 +19,10 @@ public class ExpressionParser {
         parse();
     }
 
+    /**
+     * parse the input expression & split it into tokens & put it in ArrayList
+     * if a 'condition' is found, condition object is made & it is treated as token
+     */
     private void parse() {
         String[] inputExpressionArray = JSONParseHelper.removeQuotes(inputExpression).split(" ");
         StringBuilder sb = new StringBuilder();
@@ -32,10 +36,10 @@ public class ExpressionParser {
                     index++;
                 }
                 index++;
-                arrayList.add(new Condition(sb.toString()));
+                tokens.add(new Condition(sb.toString()));
                 sb = new StringBuilder();
             } else if (isLogicalOperator(token)) {
-                arrayList.add(token);
+                tokens.add(token);
             }
         }
     }

@@ -7,32 +7,39 @@ import java.util.*;
  */
 public class ExpressionEvaluator {
     JSONObject jsonObject;
-    ArrayList<Object> parsedExpression;
+    ArrayList<Object> tokens;
 
     public ExpressionEvaluator(JSONObject jsonObject, ExpressionParser expressionParser) {
         this.jsonObject = jsonObject;
-        this.parsedExpression = expressionParser.getParsedExpression();
+        this.tokens = expressionParser.getTokens();
     }
 
+    /**
+     * evaluate the tokens against jsonObject
+     * if token is a condition object, evaluate & store it the tokens array
+     */
     public Boolean evaluate() {
-        for (int index = 0; index < parsedExpression.size(); index++) {
-            Object token = parsedExpression.get(index);
+        for (int index = 0; index < tokens.size(); index++) {
+            Object token = tokens.get(index);
             if (token instanceof Condition) {
-                parsedExpression.set(index, JSONParseHelper.getStringValue(jsonObject.evaluateCondition((Condition) token)));
+                Boolean result = jsonObject.evaluateCondition((Condition) token);
+                tokens.set(index, JSONParseHelper.getStringValue(result));
             }
         }
         return computeResult();
     }
 
+    /**
+     * parse tokens array to find the final result with the help of Stack
+     * @return
+     */
     private Boolean computeResult() {
-        Stack stack = new Stack(new String[parsedExpression.size()]);
-        for (int index = 0; index < parsedExpression.size(); index++) {
-            String token = (String) parsedExpression.get(index);
+        Stack stack = new Stack(new String[tokens.size()]);
+        for (int index = 0; index < tokens.size(); index++) {
+            String token = (String) tokens.get(index);
             parseToken(token, stack);
         }
         stack.evaluate();
-        System.out.println("final answer");
-        System.out.println(JSONParseHelper.getBooleanValue(stack.getTop()));
         return JSONParseHelper.getBooleanValue(stack.getTop());
     }
 
@@ -63,7 +70,6 @@ public class ExpressionEvaluator {
             stack.setTop(token);
         }
     }
-
 
 
 }
