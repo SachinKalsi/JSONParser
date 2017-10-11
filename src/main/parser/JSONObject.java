@@ -27,9 +27,8 @@ public class JSONObject {
         for (String keyString : array) {
             value = getValue(keyString, value);
             if (value instanceof ArrayList) {
-                // thorow exception
+                // the object is array, so assign null to value & return
                 value = null;
-                break;
             }
             if (value == null) {
                 break;
@@ -54,7 +53,6 @@ public class JSONObject {
     }
 
     private Object getValue(String key, Object map) {
-        map = (Map<String, Object>) map;
         return ((Map<String, Object>) map).get(key);
     }
 }

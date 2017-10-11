@@ -32,15 +32,9 @@ public class Condition {
     private void parseInputString() {
         String[] array = inputString.split("==");
         this.key = array[0];
-        this.value = removeSingleQuotes(array[1]);
+        this.value = JSONParseHelper.removeQuotes(array[1]);
     }
 
-    private String removeSingleQuotes(String s) {
-        if (s.charAt(0) == '\'') {
-            return s.substring(1, s.length() - 1);
-        }
-        return s;
-    }
 
     private void parseInputStringWithExistCondition() {
         String[] array = inputString.split("EXISTS");
@@ -62,10 +56,6 @@ public class Condition {
 
     public String getValue() {
         return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
 }

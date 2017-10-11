@@ -1,6 +1,6 @@
 package main.parser;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by kalsi on 09/10/17.
@@ -15,106 +15,55 @@ public class ExpressionEvaluator {
     }
 
     public Boolean evaluate() {
-        int brackets = 0;
-        Boolean result = null;
         for (int index = 0; index < parsedExpression.size(); index++) {
             Object token = parsedExpression.get(index);
             if (token instanceof Condition) {
-                parsedExpression.set(index, jsonObject.evaluateCondition((Condition) token) ? "true" : "false");
+                parsedExpression.set(index, JSONParseHelper.getStringValue(jsonObject.evaluateCondition((Condition) token)));
             }
         }
-        return findResult();
+        return computeResult();
     }
 
-    private Boolean findResult() {
-        Boolean result = null;
-        String operation = null;
-        String[] tempStack = new String[parsedExpression.size()];
-        int top = -1;
+    private Boolean computeResult() {
+        Stack stack = new Stack(new String[parsedExpression.size()]);
         for (int index = 0; index < parsedExpression.size(); index++) {
             String token = (String) parsedExpression.get(index);
-            if (token.equals(")")) {
-                while (top > -1) {
-                    if (tempStack[top].equals("(")) {
-                        tempStack[top] = result ? "true" : "false";
-                        result = null;
-                        break;
-                    }
-                    switch (tempStack[top]) {
-                        case "true":
-                        case "false":
-                            if (result == null) {
-                                result = tempStack[top] == "true" ? true : false;
-                            } else {
-                                if (operation == null) {
-                                    System.out.println("Something went wrong!!");
-                                    break;
-                                }
-                                if (operation.equals("AND")) {
-                                    result = result && tempStack[top] == "true" ? true : false;
-                                } else {
-                                    result = result || tempStack[top] == "true" ? true : false;
-                                }
-                                operation = null;
-                            }
-                            break;
-                        case "AND":
-                            operation = "AND";
-                            break;
-                        case "OR":
-                            operation = "OR";
-                            break;
-                    }
-                    top--;
-                }
-            } else {
-                tempStack[++top] = token;
-            }
+            parseToken(token, stack);
         }
-        while (top != 0) {
-            Boolean first = tempStack[top].equals("true") ? true : false;
-            top--;
-            operation = tempStack[top];
-            top--;
-            Boolean second = tempStack[top].equals("true") ? true : false;
-            if (operation.equals("AND")) {
-                tempStack[top] = getStringValue((second && first));
-            } else if (operation.equals("OR")) {
-                tempStack[top] = getStringValue((second || first));
-            } else {
-                System.out.println("Somthing went wrong!");
-            }
-        }
+        stack.evaluate();
         System.out.println("final answer");
-        System.out.println();
-
-        return getBooleanValue(tempStack[top]);
+        System.out.println(JSONParseHelper.getBooleanValue(stack.getTop()));
+        return JSONParseHelper.getBooleanValue(stack.getTop());
     }
 
-    private Boolean getBooleanValue(String booleanString) {
-        return booleanString.equals("true") ? true : false;
-    }
-
-    private String getStringValue(Boolean b) {
-        return b ? "true" : "false";
-    }
-
-    private int skipNextCondition(ArrayList<Object> parsedExpression, int index, int brackets) {
-        int finalBracketCount = brackets - 1;
-        int i = index;
-        for (; i < parsedExpression.size(); i++) {
-            Object token = parsedExpression.get(i);
-            if (token instanceof String) {
-                if (token.equals("(")) {
-                    brackets++;
-                } else if (token.equals(")")) {
-                    brackets--;
+    private void parseToken(String token, Stack stack) {
+        if (token.equals(")")) {
+            Boolean result = null;
+            String operation = null;
+            while (stack.top > -1) {
+                if (stack.getTop().equals("(")) {
+                    stack.setTop(JSONParseHelper.getStringValue(result));
+                    return;
                 }
-                if (brackets == finalBracketCount) {
-                    break;
+                if (stack.getTop().equals("true") || stack.getTop().equals("false")) {
+                    Boolean tempResult = JSONParseHelper.getBooleanValue(stack.getTop());
+                    if (result == null) {
+                        result = tempResult;
+                    } else {
+                        result = operation.equals("AND") ? (result && tempResult) : (result || tempResult);
+                        operation = null;
+                    }
+                } else {
+                    operation = stack.getTop();
                 }
+                stack.top--;
             }
+        } else {
+            stack.top++;
+            stack.setTop(token);
         }
-        return i;
     }
+
+
+
 }

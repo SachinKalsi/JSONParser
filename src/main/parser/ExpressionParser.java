@@ -20,8 +20,7 @@ public class ExpressionParser {
     }
 
     private void parse() {
-        Boolean result = false;
-        String[] inputExpressionArray = inputExpression.substring(1, inputExpression.length() - 1).split(" ");
+        String[] inputExpressionArray = JSONParseHelper.removeQuotes(inputExpression).split(" ");
         StringBuilder sb = new StringBuilder();
         for (int index = 0; index < inputExpressionArray.length; index++) {
             String token = inputExpressionArray[index];
