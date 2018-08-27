@@ -21,22 +21,35 @@ Json Expression Evaluator
 3. Evaluation will be done on a json string input. Use variable values from this json, to evaluate it against the json.  
 4. Returns true if expression is true on evaluation against a  json
 
-Sample
-Expression: "$color == 'red'" 
-Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
-Output: true
+Sample Examples
+------------------------------------------------
+1.
+      Expression: "$color == 'red'" 
+
+      Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
+
+      Output: true
+      
+2. 
+      Exp: "$mattress.name == 'king' AND $cost == 100.0"
+      
+      Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
+      
+      Output: true
         
-Exp: "$mattress.name == 'king' AND $cost == 100.0"
-Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
-Output: true
+3.
+      Exp: "NOT EXISTS $color"
+      
+      Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
+      
+      output: false
         
-Exp: "NOT EXISTS $color"
-Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
-output: false
-        
-Exp: "( $cost == 100.0 AND ( $mattress.big == false ) ) OR $size == 100"   
-Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
-Output: false
+4.
+      Exp: "( $cost == 100.0 AND ( $mattress.big == false ) ) OR $size == 100"   
+      
+      Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
+      
+      Output: false
 
 Modules
 -------------------------------------------------------------------
