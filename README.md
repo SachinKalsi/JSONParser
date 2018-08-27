@@ -1,3 +1,42 @@
+Problem Statement
+-------------------------------------------------------------------
+Json Expression Evaluator
+    a. Write a full expression parser and evaluator, that takes in an Expression and a Json
+    b. Expression will contain:
+      i. Variable (which will start with $), could also be nested (dot separated)
+      ii. Constant:
+        1) String within quotes
+        2) Boolean -  true or false
+        3) Decimal 
+        4) Number
+      iii. Logical Operator:
+        1) AND
+        2) OR
+        3) NOT
+        4) (  )   (Brackets)
+      iv. Comparison Operators
+        1) ==
+        2) EXISTS
+    c. Evaluation will be done on a json string input. Use variable values from this json, to evaluate it against the json.  
+    d. Returns true if expression is true on evaluation against a  json
+
+Sample
+Expression: "$color == 'red'" 
+Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
+Output: true
+        
+Exp: "$mattress.name == 'king' AND $cost == 100.0"
+Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]}
+Output: true
+        
+Exp: "NOT EXISTS $color"
+Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
+output: false
+        
+Exp: "( $cost == 100.0 AND ( $mattress.big == false ) ) OR $size == 100"   
+Json: {"color":"red","size":10,"cost":100.0,"mattress":{"name":"king"},"big":true,"legs":[{"length":4}]} 
+Output: false
+
 Modules
 -------------------------------------------------------------------
 1) InputData.java: This module reads the input & returns the data
